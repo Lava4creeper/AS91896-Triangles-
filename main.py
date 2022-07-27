@@ -9,6 +9,13 @@ def main_menu(proceed):
   proceed = input("Welcome to Triangle Calculator V1.0! \n\nThis calculator was designed to make your trigonometry homework a breeze!\n\nPress <enter> to continue: ")
   os.system('clear')
   return proceed
+def input_length():
+  error = "This is not a valid length. Please enter a number greater than 0"
+  length = input("Please enter the length of a side of a side of your triangle")
+  if length > 0:
+    return length
+  else:
+    print(error)
 #*******Main Routine********
 proceed = ""
 #Create loop

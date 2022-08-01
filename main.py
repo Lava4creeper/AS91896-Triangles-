@@ -10,6 +10,7 @@ def main_menu(proceed):
   proceed = input("Welcome to Triangle Calculator V1.0! \n\nThis calculator was designed to make your trigonometry homework a breeze!\n\nPress <enter> to continue: ")
   os.system('clear')
   return proceed
+#get input for lengths
 def input_length(proceed):
   while proceed != 'xxx':
     length = 0
@@ -26,9 +27,10 @@ def input_length(proceed):
         break
       proceed = input(error)
       os.system("clear")
-def is_hypotenuse(proceed):
+#find out if the input length is the hypotenuse
+def is_hypotenuse(proceed, length):
   while proceed != "xxx":
-    input_is_hypotenuse = input("Is this value the hypotenuse?\n\nIf you don't know what a hypotenuse is, enter 'h'").lower()
+    input_is_hypotenuse = input("Is the value {} the hypotenuse?\n\nIf you don't know what a hypotenuse is, enter 'h'".format(length)).lower()
     if input_is_hypotenuse == "h" or input_is_hypotenuse == "help":
       print("A hypotenuse is the longest side of a right angled triangle. It is also the side that does not at any point come into contact with the right angle. See the illustration above.\n")
       proceed = input("Once you understand this, press <enter> to continue:")
@@ -65,12 +67,30 @@ while proceed != EXITCODE:
   while more_lengths == True or known_lengths < 2:
     temp_length = input_length(proceed)
     if known_hypotenuse == False:
-      known_hypotenuse = is_hypotenuse(proceed)
+      known_hypotenuse = is_hypotenuse(proceed, temp_length)
       if known_hypotenuse == True:
         lengthF = temp_length
-        temp_length = 0
-    
-    print(temp_length)
+      else:
+        if lengthD != 0:
+          lengthD = temp_length
+        elif lengthE != 0:
+          lengthE = temp_length
+      temp_length = 0
+    else:
+      if lengthD != 0:
+        lengthD = temp_length
+      elif lengthE != 0:
+        lengthE = temp_length 
+    temp_length = 0
+    known_lengths += 1
+    more_lengths_input = input("Do you have more lengths to input?").lower()
+    if more_lengths_input == "y" or more_lengths_input == "yes":
+      continue
+    elif more_lengths_input == "n" or more_lengths_input == "no":
+      more_lengths == False
+  print("Lengths: [{}, {}, {}".format(lengthD, lengthE, lengthF))
+  input()
+
   
   #Get inputs for all known variables if needed
   

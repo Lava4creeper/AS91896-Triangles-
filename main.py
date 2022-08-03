@@ -28,6 +28,23 @@ def input_length(proceed):
       proceed = input(error)
       os.system("clear")
 #find out if the input length is the hypotenuse
+def input_angle(proceed):
+  while proceed != 'xxx':
+    angle = 0
+    error = "This is not a valid angle. Please enter a real number greater than 0° and less than 90°\n\nPress <enter> to proceed"
+    try:
+      angle = float(input("Please enter the value of an angle in degrees"))
+      if angle > 0 and angle < 90:
+        return angle
+      else:
+        proceed = input(error)
+        os.system("clear")
+    except ValueError:
+      if angle == EXITCODE:
+        break
+      proceed = input(error)
+      os.system("clear")
+  
 def is_hypotenuse(proceed, length):
   error = "Invalid input. please input 'y', 'n', or 'h'."
   while proceed != "xxx":
@@ -60,6 +77,7 @@ while proceed != EXITCODE:
   known_hypotenuse = False
   more_lengths = True
   known_lengths = 0
+  known_angles = 0
   temp_length = 0
   #This is the hypotenuse
   lengthF = 0
@@ -95,10 +113,12 @@ while proceed != EXITCODE:
       print("with the given values the entire triangle can now be described. Thankyou for your input.")
   print("Lengths: [{}, {}, {}]".format(lengthD, lengthE, lengthF))
   input()
-
-  
   #Get inputs for all known angles if needed
-  
+  if known_lengths < 2:
+    while known_angles < 1:
+      print("To calculate the dimensions of the right angled triangle with only one known length, you must input 1 angle that is not the 90° angle to proceed.")
+      angle = input_angle(proceed)
+      
   #Decide on trigonometric functions to apply
   
   #Calculate 3 unknowns

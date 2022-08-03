@@ -29,6 +29,7 @@ def input_length(proceed):
       os.system("clear")
 #find out if the input length is the hypotenuse
 def is_hypotenuse(proceed, length):
+  error = "Invalid input. please input 'y', 'n', or 'h'."
   while proceed != "xxx":
     input_is_hypotenuse = input("Is the value {} the hypotenuse?\n\nIf you don't know what a hypotenuse is, enter 'h'".format(length)).lower()
     if input_is_hypotenuse == "h" or input_is_hypotenuse == "help":
@@ -43,7 +44,7 @@ def is_hypotenuse(proceed, length):
       os.system("clear")
       return False
     else:
-      print("error")
+      print(error)
 #*******Main Routine********
 proceed = ""
 EXITCODE = "xxx"
@@ -59,40 +60,44 @@ while proceed != EXITCODE:
   known_hypotenuse = False
   more_lengths = True
   known_lengths = 0
+  temp_length = 0
   #This is the hypotenuse
   lengthF = 0
   #Main Menu
   proceed = main_menu(proceed)
   #Get inputs for all known lengths
-  while more_lengths == True or known_lengths < 2:
+  while more_lengths == True and known_lengths < 2:
     temp_length = input_length(proceed)
     if known_hypotenuse == False:
       known_hypotenuse = is_hypotenuse(proceed, temp_length)
       if known_hypotenuse == True:
         lengthF = temp_length
-      else:
-        if lengthD != 0:
-          lengthD = temp_length
-        elif lengthE != 0:
-          lengthE = temp_length
+      elif known_hypotenuse == False:
+        if lengthD == 0:
+          lengthD = temp_length 
+        elif lengthE == 0:
+          lengthE = temp_length 
       temp_length = 0
     else:
-      if lengthD != 0:
+      if lengthD == 0:
         lengthD = temp_length
-      elif lengthE != 0:
-        lengthE = temp_length 
+      elif lengthE == 0:
+        lengthE = temp_length
     temp_length = 0
     known_lengths += 1
-    more_lengths_input = input("Do you have more lengths to input?").lower()
-    if more_lengths_input == "y" or more_lengths_input == "yes":
-      continue
-    elif more_lengths_input == "n" or more_lengths_input == "no":
-      more_lengths == False
-  print("Lengths: [{}, {}, {}".format(lengthD, lengthE, lengthF))
+    if known_lengths < 2:
+      more_lengths_input = input("Do you have more lengths to input?").lower()
+      if more_lengths_input == "y" or more_lengths_input == "yes":
+        continue
+      elif more_lengths_input == "n" or more_lengths_input == "no":
+        more_lengths = False
+    else:
+      print("with the given values the entire triangle can now be described. Thankyou for your input.")
+  print("Lengths: [{}, {}, {}]".format(lengthD, lengthE, lengthF))
   input()
 
   
-  #Get inputs for all known variables if needed
+  #Get inputs for all known angles if needed
   
   #Decide on trigonometric functions to apply
   

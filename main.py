@@ -197,6 +197,7 @@ while proceed != EXITCODE:
       #if the length the user has isn't the hypotenuse, work out if the angle is opposite or adjacent
       if known_hypotenuse == False:
         angle_relation = angle_checker(proceed, temp_angle, lengthD)
+        #Decide on trigonometric functions to apply
         if angle_relation == "o":
           #if the user has the opposite angle, function is sin then tan
           function = "sin, tan"
@@ -216,9 +217,14 @@ while proceed != EXITCODE:
     elif lengthD != 0 and lengthF != 0:
       #if the user has the hypotenuse, function is sec then sin
       function = "sec, sin"
-  #Decide on trigonometric functions to apply
-  
+  #possible functions: sin, tan; cos, tan; sin, cos; cot, sin; sec, sin
   #Calculate 3 unknowns
+  #sin_tan
+  #cos_tan
+  #sin_cos
+  #cot_sin
+  #sec_sin
+  
   
   #Return triangle dimensions to user
   

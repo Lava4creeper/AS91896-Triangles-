@@ -23,7 +23,7 @@ def input_length(proceed):
     error = "This is not a valid length. Please enter a real number greater than 0.\n\nPress <enter> to proceed:"
     #get length input
     try:
-      length = float(input("Please enter the length of a side of a side of your triangle:\n"))
+      length = round(float(input("Please enter the length of a side of your triangle:\n")), 3)
       #check that length is valid
       if length > 0:
         return length
@@ -75,7 +75,7 @@ def input_angle(proceed):
     error = "This is not a valid angle. Please enter a real number greater than 0° and less than 90°\n\nPress <enter> to proceed"
     #get an input for the angle in degrees
     try:
-      angle = float(input("Please enter the value of an angle in degrees"))
+      angle = round(float(input("Please enter the value of an angle in degrees")), 3)
       #check the input angle is valid and return it
       if angle > 0 and angle < 90:
         return angle
@@ -112,6 +112,31 @@ def angle_checker(proceed, angle, length):
       proceed = input("Invalid input. Please enter yes (y) or no (n)\n\nPress <enter> to proceed")
 #*******Main Routine********
 #Set up variables
+def sin_tan(angleA, angleB, angleC, lengthD, lengthE, lengthF):
+  angleB = (math.pi / 2) - angleA
+  lengthF = round(lengthD / math.sin(angleA), 3)
+  lengthE = round(lengthD / math.tan(angleA), 3)
+  return angleA, angleB, angleC, lengthD, lengthE, lengthF
+def cos_tan(angleA, angleB, angleC, lengthD, lengthE, lengthF):
+  angleA = (math.pi / 2) - angleB
+  lengthF = round(lengthD / math.cos(angleB), 3)
+  lengthE = round(lengthD * math.tan(angleB), 3)
+  return angleA, angleB, angleC, lengthD, lengthE, lengthF
+def sin_cos(angleA, angleB, angleC, lengthD, lengthE, lengthF):
+  angleB = (math.pi / 2) - angleA
+  lengthD = round(lengthF * math.sin(angleA), 3)
+  lengthE = round(lengthF * math.cos(angleA), 3)
+  return angleA, angleB, angleC, lengthD, lengthE, lengthF
+def cot_sin(angleA, angleB, angleC, lengthD, lengthE, lengthF):
+  angleA = round(math.atan(lengthD / lengthE), 3)
+  angleB = (math.pi / 2) - angleA
+  lengthF = round(lengthD / math.sin(angleA), 3)
+  return angleA, angleB, angleC, lengthD, lengthE, lengthF
+def sec_sin(angleA, angleB, angleC, lengthD, lengthE, lengthF):
+  angleA = round(math.acos(lengthD / lengthF))
+  angleB = (math.pi / 2) - angleA
+  lengthE = round(lengthD / math.sin(angleA), 2)
+  return angleA, angleB, angleC, lengthD, lengthE, lengthF
 proceed = ""
 EXITCODE = "xxx"
 #Create loop and establish exit code
@@ -194,21 +219,25 @@ while proceed != EXITCODE:
     while known_angles < 1:
       print("To calculate the dimensions of the right angled triangle with only one known length, you must input 1 angle that is not the 90° angle to proceed.")
       temp_angle = input_angle(proceed)
+      #angleA = math.radians(temp_angle)
       #if the length the user has isn't the hypotenuse, work out if the angle is opposite or adjacent
       if known_hypotenuse == False:
         angle_relation = angle_checker(proceed, temp_angle, lengthD)
         #Decide on trigonometric functions to apply
         if angle_relation == "o":
           #if the user has the opposite angle, function is sin then tan
+          angleA = math.radians(temp_angle)
           function = "sin, tan"
         if angle_relation == "a":
           #if the user has the adjacent angle, function is cos then tan
+          angleB = math.radians(temp_angle)
           function = "cos, tan"
       else:
         #If the user has the hypotenuse, function is sin then cos
+        angleA = math.radians(temp_angle)
         function = "sin, cos"
       #increase known angles by one
-      known_angles ++
+      known_angles += 1
   #if the user has two lengths, derive functions
   else:
     if lengthD != 0 and lengthE != 0:
@@ -220,14 +249,23 @@ while proceed != EXITCODE:
   #possible functions: sin, tan; cos, tan; sin, cos; cot, sin; sec, sin
   #Calculate 3 unknowns
   #sin_tan
+  if function == "sin, tan":
+    angleA, angleB, angleC, lengthD, lengthE, lengthF = sin_tan(angleA, angleB, angleC, lengthD, lengthE, lengthF)
   #cos_tan
+  elif function == "cos, tan":
+    angleA, angleB, angleC, lengthD, lengthE, lengthF = cos_tan(angleA, angleB, angleC, lengthD, lengthE, lengthF)
   #sin_cos
+  elif function == "sin, cos":
+    angleA, angleB, angleC, lengthD, lengthE, lengthF = sin_cos(angleA, angleB, angleC, lengthD, lengthE, lengthF)
   #cot_sin
+  elif function == "cot, sin":
+    angleA, angleB, angleC, lengthD, lengthE, lengthF = cot_sin(angleA, angleB, angleC, lengthD, lengthE, lengthF)
   #sec_sin
-  
+  elif function == "sec, sin":
+    angleA, angleB, angleC, lengthD, lengthE, lengthF = sec_sin(angleA, angleB, angleC, lengthD, lengthE, lengthF)
   
   #Return triangle dimensions to user
-  
+  input("Values: [{}, {}, {}, {}, {}, {}, Functions: {}]".format(round(math.degrees(angleA), 2), round(math.degrees(angleB), 2), round(math.degrees(angleC), 2), lengthD, lengthE, lengthF, function))
   #Save triangle dimensions to text document
   
   #End loop

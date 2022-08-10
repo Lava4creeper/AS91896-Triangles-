@@ -133,9 +133,9 @@ def cot_sin(angleA, angleB, angleC, lengthD, lengthE, lengthF):
   lengthF = round(lengthD / math.sin(angleA), 3)
   return angleA, angleB, angleC, lengthD, lengthE, lengthF
 def sec_sin(angleA, angleB, angleC, lengthD, lengthE, lengthF):
-  angleA = round(math.acos(lengthD / lengthF))
+  angleA = round(math.acos(lengthD / lengthF), 3)
   angleB = (math.pi / 2) - angleA
-  lengthE = round(lengthD / math.sin(angleA), 2)
+  lengthE = round(lengthF * math.sin(angleA), 3)
   return angleA, angleB, angleC, lengthD, lengthE, lengthF
 proceed = ""
 EXITCODE = "xxx"

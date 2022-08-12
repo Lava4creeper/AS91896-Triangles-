@@ -15,7 +15,7 @@ def main_menu(proceed):
   #return varaible proceed, set up for exit code
   return proceed
 #get input for lengths
-def input_length(proceed):
+def input_length(proceed, known_hypotenuse, lengthF):
   #set up loop and exit code
   while proceed != 'xxx':
     #set up variables
@@ -25,7 +25,9 @@ def input_length(proceed):
     try:
       length = round(float(input("Please enter the length of a side of your triangle:\n")), 3)
       #check that length is valid
-      if length > 0:
+      if length >= lengthF and known_hypotenuse == True:
+        
+      elif length > 0:
         return length
       #if length is invalid, print error message
       else:
@@ -167,7 +169,7 @@ while proceed != EXITCODE:
   #Get inputs for all known lengths
   while more_lengths == True and known_lengths < 2:
     #input length function assigned to temporary variable
-    temp_length = input_length(proceed)
+    temp_length = input_length(proceed, known_hypotenuse, lengthF)
     #work out which variable to assign length to
     if known_hypotenuse == False:
       known_hypotenuse = is_hypotenuse(proceed, temp_length)
@@ -267,7 +269,9 @@ while proceed != EXITCODE:
   #Return triangle dimensions to user
   input("Values: [{}, {}, {}, {}, {}, {}, Functions: {}]".format(round(math.degrees(angleA), 2), round(math.degrees(angleB), 2), round(math.degrees(angleC), 2), lengthD, lengthE, lengthF, function))
   #Save triangle dimensions to text document
-  
+  history = open("history.txt", "w")
+  history.write("\n{}, {}, {}, {}, {}, {}, {}".format(angleA, angleB, angleC, lengthD, lengthE, lengthF, function))
+  history.close()
   #End loop
   
   #Return calculation history

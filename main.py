@@ -26,7 +26,7 @@ def input_length(proceed, known_hypotenuse, lengthF):
       length = round(float(input("Please enter the length of a side of your triangle:\n")), 3)
       #check that length is valid
       if length >= lengthF and known_hypotenuse == True:
-        
+        proceed = input("This length is greater than the length you have named your hypotenuse. This is not a possible triangle, your hypotenuse must be the longest length.")
       elif length > 0:
         return length
       #if length is invalid, print error message
@@ -38,7 +38,7 @@ def input_length(proceed, known_hypotenuse, lengthF):
     except ValueError:
       #check input wasn't the exit code
       if length == EXITCODE:
-        break
+        return 0, length
       #print error message
       proceed = input(error)
       #clear screen
@@ -162,14 +162,20 @@ while proceed != EXITCODE:
   known_angles = 0
   temp_length = 0
   temp_angle = 0
+  history = open("history.txt", "a")
+  history.close()
   #This is the trignonmetric functio to apply
   function = ""
   #Main Menu function
   proceed = main_menu(proceed)
+  if proceed == EXITCODE:
+    break
   #Get inputs for all known lengths
   while more_lengths == True and known_lengths < 2:
     #input length function assigned to temporary variable
-    temp_length = input_length(proceed, known_hypotenuse, lengthF)
+    temp_length, proceed = input_length(proceed, known_hypotenuse, lengthF)
+    if proceed == EXITCODE:
+      break
     #work out which variable to assign length to
     if known_hypotenuse == False:
       known_hypotenuse = is_hypotenuse(proceed, temp_length)
@@ -269,7 +275,7 @@ while proceed != EXITCODE:
   #Return triangle dimensions to user
   input("Values: [{}, {}, {}, {}, {}, {}, Functions: {}]".format(round(math.degrees(angleA), 2), round(math.degrees(angleB), 2), round(math.degrees(angleC), 2), lengthD, lengthE, lengthF, function))
   #Save triangle dimensions to text document
-  history = open("history.txt", "w")
+  history = open("history.txt", "a")
   history.write("\n{}, {}, {}, {}, {}, {}, {}".format(angleA, angleB, angleC, lengthD, lengthE, lengthF, function))
   history.close()
   #End loop

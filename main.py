@@ -15,20 +15,20 @@ def main_menu(proceed):
   #return varaible proceed, set up for exit code
   return proceed
 #get input for lengths
-def input_length(proceed, known_hypotenuse, lengthF):
+def input_length(proceed, known_hypotenuse, lengthF, EXITCODE):
   #set up loop and exit code
-  while proceed != 'xxx':
+  while proceed != EXITCODE:
     #set up variables
-    length = 0
     error = "This is not a valid length. Please enter a real number greater than 0.\n\nPress <enter> to proceed:"
     #get length input
+    length = input("Please enter the length of a side of your triangle:\n")
     try:
-      length = round(float(input("Please enter the length of a side of your triangle:\n")), 3)
+      rounded_length = round(float(length), 3)
       #check that length is valid
       if length >= lengthF and known_hypotenuse == True:
         proceed = input("This length is greater than the length you have named your hypotenuse. This is not a possible triangle, your hypotenuse must be the longest length.")
       elif length > 0:
-        return length
+        return length, ""
       #if length is invalid, print error message
       else:
         proceed = input(error)
@@ -36,7 +36,7 @@ def input_length(proceed, known_hypotenuse, lengthF):
         os.system('clear')
     #if the user entered a value that wasn't a number
     except ValueError:
-      #check input wasn't the exit code
+      #check if input was the exit code
       if length == EXITCODE:
         return 0, length
       #print error message
@@ -112,8 +112,6 @@ def angle_checker(proceed, angle, length):
     #if the user enters an invalid value, print error message
     else:
       proceed = input("Invalid input. Please enter yes (y) or no (n)\n\nPress <enter> to proceed")
-#*******Main Routine********
-#Set up variables
 def sin_tan(angleA, angleB, angleC, lengthD, lengthE, lengthF):
   angleB = (math.pi / 2) - angleA
   lengthF = round(lengthD / math.sin(angleA), 3)
@@ -139,8 +137,13 @@ def sec_sin(angleA, angleB, angleC, lengthD, lengthE, lengthF):
   angleB = (math.pi / 2) - angleA
   lengthE = round(lengthF * math.sin(angleA), 3)
   return angleA, angleB, angleC, lengthD, lengthE, lengthF
+#*******Main Routine********
+#Set up variables
 proceed = ""
 EXITCODE = "xxx"
+history = open("history.txt", "w")
+history.write("")
+history.close()
 #Create loop and establish exit code
 while proceed != EXITCODE:
   #Reset Variables
@@ -162,8 +165,6 @@ while proceed != EXITCODE:
   known_angles = 0
   temp_length = 0
   temp_angle = 0
-  history = open("history.txt", "a")
-  history.close()
   #This is the trignonmetric functio to apply
   function = ""
   #Main Menu function
@@ -173,11 +174,11 @@ while proceed != EXITCODE:
   #Get inputs for all known lengths
   while more_lengths == True and known_lengths < 2:
     #input length function assigned to temporary variable
-    temp_length, proceed = input_length(proceed, known_hypotenuse, lengthF)
+    temp_length, proceed = input_length(proceed, known_hypotenuse, lengthF, EXITCODE)
     if proceed == EXITCODE:
       break
     #work out which variable to assign length to
-    if known_hypotenuse == False:
+    elif known_hypotenuse == False:
       known_hypotenuse = is_hypotenuse(proceed, temp_length)
       if known_hypotenuse == True:
         lengthF = temp_length
@@ -276,7 +277,7 @@ while proceed != EXITCODE:
   input("Values: [{}, {}, {}, {}, {}, {}, Functions: {}]".format(round(math.degrees(angleA), 2), round(math.degrees(angleB), 2), round(math.degrees(angleC), 2), lengthD, lengthE, lengthF, function))
   #Save triangle dimensions to text document
   history = open("history.txt", "a")
-  history.write("\n{}, {}, {}, {}, {}, {}, {}".format(angleA, angleB, angleC, lengthD, lengthE, lengthF, function))
+  history.write("{}, {}, {}, {}, {}, {}, {}\n".format(angleA, angleB, angleC, lengthD, lengthE, lengthF, function))
   history.close()
   #End loop
   

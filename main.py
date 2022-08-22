@@ -9,7 +9,7 @@ def main_menu(proceed):
   #clear screen
   os.system("clear")
   #introduce user to the program and allow them to continue when ready
-  proceed = input("Welcome to Triangle Calculator V1.0! \n\nThis calculator was designed to make your trigonometry homework a breeze!\n\nPress <enter> to continue: ")
+  proceed = input("Welcome to Triangle Calculator V1.0! \n\nThis calculator was designed to make your trigonometry homework a breeze!\n\nPress <enter> to continue:\n ")
   #clear screen
   os.system('clear')
   #return varaible proceed, set up for exit code
@@ -19,16 +19,17 @@ def input_length(proceed, known_hypotenuse, lengthF, EXITCODE):
   #set up loop and exit code
   while proceed != EXITCODE:
     #set up variables
-    error = "This is not a valid length. Please enter a real number greater than 0.\n\nPress <enter> to proceed:"
+    error = "This is not a valid length. Please enter a real number greater than 0.\n\nPress <enter> to proceed:\n"
     #get length input
     length = input("Please enter the length of a side of your triangle:\n")
     try:
       rounded_length = round(float(length), 3)
       #check that length is valid
-      if length >= lengthF and known_hypotenuse == True:
-        proceed = input("This length is greater than the length you have named your hypotenuse. This is not a possible triangle, your hypotenuse must be the longest length.")
-      elif length > 0:
-        return length, ""
+      print(length, lengthF)
+      if rounded_length >= lengthF and known_hypotenuse == True:
+        proceed = input("This length is greater than the length you have named your hypotenuse. This is not a possible triangle, your hypotenuse must be the longest length.\n")
+      elif rounded_length > 0:
+        return rounded_length, ""
       #if length is invalid, print error message
       else:
         proceed = input(error)
@@ -50,11 +51,11 @@ def is_hypotenuse(proceed, length):
   #loop, set up exit code
   while proceed != "xxx":
     #Ask the user if their value is the hypotenuse, or if they know what a hypotenuse is
-    input_is_hypotenuse = input("Is the value {} the hypotenuse?\n\nIf you don't know what a hypotenuse is, enter 'h'".format(length)).lower()
+    input_is_hypotenuse = input("Is the value {} the hypotenuse?\n\nIf you don't know what a hypotenuse is, enter 'h':\n".format(length)).lower()
     #If the user doesn't know what a hypotenuse is, inform them
     if input_is_hypotenuse == "h" or input_is_hypotenuse == "help":
       print("A hypotenuse is the longest side of a right angled triangle. It is also the side that does not at any point come into contact with the right angle. See the illustration above.\n")
-      proceed = input("Once you understand this, press <enter> to continue:")
+      proceed = input("Once you understand this, press <enter> to continue:\n")
       os.system("clear")
       continue
     #if the length is the hypotenuse return True
@@ -74,10 +75,10 @@ def input_angle(proceed):
   while proceed != 'xxx':
     #Set up variables and error message
     angle = 0
-    error = "This is not a valid angle. Please enter a real number greater than 0° and less than 90°\n\nPress <enter> to proceed"
+    error = "This is not a valid angle. Please enter a real number greater than 0° and less than 90°\n\nPress <enter> to proceed:\n"
     #get an input for the angle in degrees
     try:
-      angle = round(float(input("Please enter the value of an angle in degrees")), 3)
+      angle = round(float(input("Please enter the value of an angle in degrees:\n")), 3)
       #check the input angle is valid and return it
       if angle > 0 and angle < 90:
         return angle
@@ -100,7 +101,7 @@ def angle_checker(proceed, angle, length):
   #Set up loop and exit code
   while proceed != "xxx":
     #ask the user if the angle is the adjacent; if it is touching the one known length
-    is_adjacent = input("Is the angle {}° touching the length {}? ".format(angle, length)).lower()
+    is_adjacent = input("Is the angle {}° touching the length {}?:\n ".format(angle, length)).lower()
     #If the length is the adjacent, inform user and return "a"
     if is_adjacent == "yes" or is_adjacent == "y":
       print("This angle is the adjacent to the length {}".format(length))
@@ -111,7 +112,7 @@ def angle_checker(proceed, angle, length):
       return "o"
     #if the user enters an invalid value, print error message
     else:
-      proceed = input("Invalid input. Please enter yes (y) or no (n)\n\nPress <enter> to proceed")
+      proceed = input("Invalid input. Please enter yes (y) or no (n)\n\nPress <enter> to proceed:\n")
 def sin_tan(angleA, angleB, angleC, lengthD, lengthE, lengthF):
   angleB = (math.pi / 2) - angleA
   lengthF = round(lengthD / math.sin(angleA), 3)
@@ -203,11 +204,10 @@ while proceed != EXITCODE:
       break_loop = False
       while break_loop != True:
         #ask user if they have more known lengths
-        more_lengths_input = input("Do you have more lengths to input?").lower()
+        more_lengths_input = input("Do you have more lengths to input?:\n").lower()
         #If the user does have more lengths to input, exit loop and continue
         if more_lengths_input == "y" or more_lengths_input == "yes":
           break_loop = True
-
         #If the user has no more lengths to input, exit loop and get an angle
         elif more_lengths_input == "n" or more_lengths_input == "no":
           break_loop = True
@@ -274,12 +274,22 @@ while proceed != EXITCODE:
     angleA, angleB, angleC, lengthD, lengthE, lengthF = sec_sin(angleA, angleB, angleC, lengthD, lengthE, lengthF)
   
   #Return triangle dimensions to user
-  input("Values: [{}, {}, {}, {}, {}, {}, Functions: {}]".format(round(math.degrees(angleA), 2), round(math.degrees(angleB), 2), round(math.degrees(angleC), 2), lengthD, lengthE, lengthF, function))
+  input("Values: [{}, {}, {}, {}, {}, {}, Functions: {}]\n".format(round(math.degrees(angleA), 2), round(math.degrees(angleB), 2), round(math.degrees(angleC), 2), lengthD, lengthE, lengthF, function))
   #Save triangle dimensions to text document
   history = open("history.txt", "a")
-  history.write("{}, {}, {}, {}, {}, {}, {}\n".format(angleA, angleB, angleC, lengthD, lengthE, lengthF, function))
+  history.write("Angles: {}, {}. Hypotenuse: {}. Angles: {}, {}. Right angle: {}. Functions: {}\n".format(round(math.degrees(angleA), 2), round(math.degrees(angleB), 2), round(math.degrees(angleC), 2), lengthD, lengthE, lengthF, function))
   history.close()
   #End loop
   
-  #Return calculation history
+#Return calculation history
+history = open("history.txt", "r")
+#history_lines = len(history.readlines())
+history_items = history.readlines()
+#print(history_lines)
+history_number = 0
+print("History: ")
+for i in history_items:
+  print(history_items[history_number])
+  history_number += 1
 print("Program ceased with exit code 0")
+

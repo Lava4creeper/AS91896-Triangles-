@@ -1,0 +1,3 @@
+Lengths: 9.0, 81.0. Hypotenuse: 90.0. Angles: 1.5698096782600704e+166, 9.911388233866063e+166. Right angle: 1.0034934934934935e+167. Functions: sin, cos
+Lengths: 23.0, 67.0. Hypotenuse: 90.0. Angles: 234.0, 551.269. Right angle: 598.877. Functions: sin, tan
+Lengths: 86.97, 3.03. Hypotenuse: 90.0. Angles: 433.0, 23.0. Right angle: 433.604. Functions: cot, sin

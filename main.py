@@ -3,6 +3,7 @@ import os
 import time
 import math
 import turtle
+EXITCODE = "xxx"
 #functions go here
 #Function 1: main_menu was created by Thomas Gardner on the 28/07/2022 to greet the user and inform them of the purpose of this program
 def main_menu(proceed):
@@ -15,13 +16,14 @@ def main_menu(proceed):
   #return varaible proceed, set up for exit code
   return proceed
 #get input for lengths
-def input_length(proceed, known_hypotenuse, lengthF, EXITCODE):
+def input_length(proceed, known_hypotenuse, lengthF):
   #set up loop and exit code
   while proceed != EXITCODE:
     #set up variables
     error = "This is not a valid length. Please enter a real number greater than 0.\n\nPress <enter> to proceed:\n"
     #get length input
     length = input("Please enter the length of a side of your triangle:\n")
+    proceed = length
     try:
       rounded_length = round(float(length), 3)
       #check that length is valid
@@ -39,11 +41,13 @@ def input_length(proceed, known_hypotenuse, lengthF, EXITCODE):
     except ValueError:
       #check if input was the exit code
       if length == EXITCODE:
-        return 0, length
+        return 0, EXITCODE
       #print error message
       proceed = input(error)
       #clear screen
       os.system("clear")
+    #Loop was exited because exit code was used; return exit code
+    return 0, EXITCODE
 #find out if the input length is the hypotenuse
 def is_hypotenuse(proceed, length):
   #set up error message
@@ -52,23 +56,30 @@ def is_hypotenuse(proceed, length):
   while proceed != "xxx":
     #Ask the user if their value is the hypotenuse, or if they know what a hypotenuse is
     input_is_hypotenuse = input("Is the value {} the hypotenuse?\n\nIf you don't know what a hypotenuse is, enter 'h':\n".format(length)).lower()
+    proceed = input_is_hypotenuse
+    if proceed == EXITCODE:
+      return False, EXITCODE
     #If the user doesn't know what a hypotenuse is, inform them
-    if input_is_hypotenuse == "h" or input_is_hypotenuse == "help":
+    elif input_is_hypotenuse == "h" or input_is_hypotenuse == "help":
       print("A hypotenuse is the longest side of a right angled triangle. It is also the side that does not at any point come into contact with the right angle. See the illustration above.\n")
       proceed = input("Once you understand this, press <enter> to continue:\n")
+      if proceed == EXITCODE:
+        return False, EXITCODE
       os.system("clear")
       continue
     #if the length is the hypotenuse return True
     elif input_is_hypotenuse == "y" or input_is_hypotenuse == "yes":
       os.system("clear")
-      return True
+      return True, proceed
     #If the length is not the hypotenuse return False
     elif input_is_hypotenuse == "n" or input_is_hypotenuse == "no":
       os.system("clear")
-      return False
+      return False, proceed
     #If the user inputs an invalid statement print error message
     else:
-      print(error)
+      proceed = input(error)
+      if proceed == EXITCODE:
+        return False, EXITCODE
 #get input for angles
 def input_angle(proceed):
   #Set up loop and exit code
@@ -102,6 +113,7 @@ def angle_checker(proceed, angle, length):
   while proceed != "xxx":
     #ask the user if the angle is the adjacent; if it is touching the one known length
     is_adjacent = input("Is the angle {}° touching the length {}?:\n ".format(angle, length)).lower()
+    proceed = is_adjacent
     #If the length is the adjacent, inform user and return "a"
     if is_adjacent == "yes" or is_adjacent == "y":
       print("This angle is the adjacent to the length {}".format(length))
@@ -140,8 +152,19 @@ def sec_sin(angleA, angleB, angleC, lengthD, lengthE, lengthF):
   return angleA, angleB, angleC, lengthD, lengthE, lengthF
 #*******Main Routine********
 #Set up variables
+def exit_code():
+  print("Exit code has been entered. Session ceasing\nHistory:\n")
+  history = open("history.txt", "r")
+  history_items = history.readlines()
+  history.close()
+  history_lines = len(history.readlines())
+  if history_lines == 0:
+    print("No history found")
+  else:
+    for i in history_items:
+      print(history_items[history_number])
+    
 proceed = ""
-EXITCODE = "xxx"
 history = open("history.txt", "w")
 history.write("")
 history.close()
@@ -172,6 +195,7 @@ while proceed != EXITCODE:
   proceed = main_menu(proceed)
   if proceed == EXITCODE:
     break
+
   #Get inputs for all known lengths
   while more_lengths == True and known_lengths < 2:
     #input length function assigned to temporary variable
@@ -180,7 +204,7 @@ while proceed != EXITCODE:
       break
     #work out which variable to assign length to
     elif known_hypotenuse == False:
-      known_hypotenuse = is_hypotenuse(proceed, temp_length)
+      known_hypotenuse, proceed = is_hypotenuse(proceed, temp_length, EXITCODE)
       if known_hypotenuse == True:
         lengthF = temp_length
       elif known_hypotenuse == False:
@@ -205,6 +229,7 @@ while proceed != EXITCODE:
       while break_loop != True:
         #ask user if they have more known lengths
         more_lengths_input = input("Do you have more lengths to input?:\n").lower()
+        proceed = more_lengths_input
         #If the user does have more lengths to input, exit loop and continue
         if more_lengths_input == "y" or more_lengths_input == "yes":
           break_loop = True
@@ -220,8 +245,11 @@ while proceed != EXITCODE:
     else:
       print("with the given values the entire triangle can now be described. Thankyou for your input.")
       #inform user of the input lengths
-  print("Lengths: [{}, {}, {}]".format(lengthD, lengthE, lengthF))
-  input()
+  if proceed == EXITCODE:
+    break
+  else:
+    print("Lengths: [{}, {}, {}]".format(lengthD, lengthE, lengthF))
+    proceed = input()
   #Get inputs for all known angles if needed
   if known_lengths < 2:
     #Loop, inform user that they don't have enough lengths to derive the entire triangle, get an angle
@@ -274,22 +302,22 @@ while proceed != EXITCODE:
     angleA, angleB, angleC, lengthD, lengthE, lengthF = sec_sin(angleA, angleB, angleC, lengthD, lengthE, lengthF)
   
   #Return triangle dimensions to user
-  input("Values: [{}, {}, {}, {}, {}, {}, Functions: {}]\n".format(round(math.degrees(angleA), 2), round(math.degrees(angleB), 2), round(math.degrees(angleC), 2), lengthD, lengthE, lengthF, function))
+  proceed = input("Values: [{}, {}, {}, {}, {}, {}, Functions: {}]\n".format(round(math.degrees(angleA), 2), round(math.degrees(angleB), 2), round(math.degrees(angleC), 2), lengthD, lengthE, lengthF, function))
   #Save triangle dimensions to text document
   history = open("history.txt", "a")
-  history.write("Angles: {}, {}. Hypotenuse: {}. Angles: {}, {}. Right angle: {}. Functions: {}\n".format(round(math.degrees(angleA), 2), round(math.degrees(angleB), 2), round(math.degrees(angleC), 2), lengthD, lengthE, lengthF, function))
+  history.write("Angles: {}, {}. Right Angle: {}. Lengths: {}, {}. Hypotenuse: {}. Functions: {}\n".format(round(math.degrees(angleA), 2), round(math.degrees(angleB), 2), round(math.degrees(angleC), 2), lengthD, lengthE, lengthF, function))
   history.close()
   #End loop
   
 #Return calculation history
 history = open("history.txt", "r")
 #history_lines = len(history.readlines())
-history_items = history.readlines()
 #print(history_lines)
+history_items = history.readlines()
+history.close()
 history_number = 0
 print("History: ")
 for i in history_items:
   print(history_items[history_number])
   history_number += 1
 print("Program ceased with exit code 0")
-

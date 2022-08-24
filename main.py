@@ -11,6 +11,8 @@ def main_menu(proceed):
   os.system("clear")
   #introduce user to the program and allow them to continue when ready
   proceed = input("Welcome to Triangle Calculator V1.0! \n\nThis calculator was designed to make your trigonometry homework a breeze!\n\nPress <enter> to continue:\n ")
+  if proceed == EXITCODE:
+    exit_code()
   #clear screen
   os.system('clear')
   #return varaible proceed, set up for exit code
@@ -24,17 +26,23 @@ def input_length(proceed, known_hypotenuse, lengthF):
     #get length input
     length = input("Please enter the length of a side of your triangle:\n")
     proceed = length
+    if proceed == EXITCODE:
+      exit_code()
     try:
       rounded_length = round(float(length), 3)
       #check that length is valid
       print(length, lengthF)
       if rounded_length >= lengthF and known_hypotenuse == True:
         proceed = input("This length is greater than the length you have named your hypotenuse. This is not a possible triangle, your hypotenuse must be the longest length.\n")
+        if proceed == EXITCODE:
+          exit_code()
       elif rounded_length > 0:
         return rounded_length, ""
       #if length is invalid, print error message
       else:
         proceed = input(error)
+        if proceed == EXITCODE:
+          exit_code()
         #clear screen
         os.system('clear')
     #if the user entered a value that wasn't a number
@@ -44,6 +52,8 @@ def input_length(proceed, known_hypotenuse, lengthF):
         return 0, EXITCODE
       #print error message
       proceed = input(error)
+      if proceed == EXITCODE:
+        exit_code()
       #clear screen
       os.system("clear")
     #Loop was exited because exit code was used; return exit code
@@ -58,13 +68,13 @@ def is_hypotenuse(proceed, length):
     input_is_hypotenuse = input("Is the value {} the hypotenuse?\n\nIf you don't know what a hypotenuse is, enter 'h':\n".format(length)).lower()
     proceed = input_is_hypotenuse
     if proceed == EXITCODE:
-      return False, EXITCODE
+      exit_code()
     #If the user doesn't know what a hypotenuse is, inform them
     elif input_is_hypotenuse == "h" or input_is_hypotenuse == "help":
       print("A hypotenuse is the longest side of a right angled triangle. It is also the side that does not at any point come into contact with the right angle. See the illustration above.\n")
       proceed = input("Once you understand this, press <enter> to continue:\n")
       if proceed == EXITCODE:
-        return False, EXITCODE
+        exit_code()
       os.system("clear")
       continue
     #if the length is the hypotenuse return True
@@ -79,7 +89,7 @@ def is_hypotenuse(proceed, length):
     else:
       proceed = input(error)
       if proceed == EXITCODE:
-        return False, EXITCODE
+        exit_code()
 #get input for angles
 def input_angle(proceed):
   #Set up loop and exit code
@@ -96,6 +106,8 @@ def input_angle(proceed):
         #If the angle is invalid print error message
       else:
         proceed = input(error)
+        if proceed == EXITCODE:
+          exit_code()
         #clear screen
         os.system("clear")
     #if the user inputs an invalid value
@@ -105,6 +117,8 @@ def input_angle(proceed):
         break
       #print error message
       proceed = input(error)
+      if proceed == EXITCODE:
+        exit_code()
       #Clear screen
       os.system("clear")
 #Check angle relation to length
@@ -114,6 +128,8 @@ def angle_checker(proceed, angle, length):
     #ask the user if the angle is the adjacent; if it is touching the one known length
     is_adjacent = input("Is the angle {}° touching the length {}?:\n ".format(angle, length)).lower()
     proceed = is_adjacent
+    if proceed == EXITCODE:
+      exit_code()
     #If the length is the adjacent, inform user and return "a"
     if is_adjacent == "yes" or is_adjacent == "y":
       print("This angle is the adjacent to the length {}".format(length))
@@ -125,6 +141,8 @@ def angle_checker(proceed, angle, length):
     #if the user enters an invalid value, print error message
     else:
       proceed = input("Invalid input. Please enter yes (y) or no (n)\n\nPress <enter> to proceed:\n")
+      if proceed == EXITCODE:
+        exit_code()
 def sin_tan(angleA, angleB, angleC, lengthD, lengthE, lengthF):
   angleB = (math.pi / 2) - angleA
   lengthF = round(lengthD / math.sin(angleA), 3)
@@ -156,20 +174,22 @@ def exit_code():
   print("Exit code has been entered. Session ceasing\nHistory:\n")
   history = open("history.txt", "r")
   history_items = history.readlines()
+  history_lines = len(history_items)
   history.close()
-  history_lines = len(history.readlines())
+  history_number = 0
   if history_lines == 0:
     print("No history found")
   else:
     for i in history_items:
       print(history_items[history_number])
+      history_number += 1
+  main()
     
-proceed = ""
 history = open("history.txt", "w")
 history.write("")
 history.close()
 #Create loop and establish exit code
-while proceed != EXITCODE:
+def main():
   #Reset Variables
   #if only lengthD is known, this is the opposite
   angleA = 0
@@ -189,22 +209,25 @@ while proceed != EXITCODE:
   known_angles = 0
   temp_length = 0
   temp_angle = 0
+  proceed = ""
   #This is the trignonmetric functio to apply
   function = ""
   #Main Menu function
   proceed = main_menu(proceed)
   if proceed == EXITCODE:
-    break
+    exit_code()  
 
   #Get inputs for all known lengths
   while more_lengths == True and known_lengths < 2:
     #input length function assigned to temporary variable
-    temp_length, proceed = input_length(proceed, known_hypotenuse, lengthF, EXITCODE)
+    temp_length, proceed = input_length(proceed, known_hypotenuse, lengthF)
     if proceed == EXITCODE:
-      break
+      exit_code()
     #work out which variable to assign length to
     elif known_hypotenuse == False:
-      known_hypotenuse, proceed = is_hypotenuse(proceed, temp_length, EXITCODE)
+      known_hypotenuse, proceed = is_hypotenuse(proceed, temp_length)
+      if proceed == EXITCODE:
+        exit_code()
       if known_hypotenuse == True:
         lengthF = temp_length
       elif known_hypotenuse == False:
@@ -230,6 +253,8 @@ while proceed != EXITCODE:
         #ask user if they have more known lengths
         more_lengths_input = input("Do you have more lengths to input?:\n").lower()
         proceed = more_lengths_input
+        if proceed == EXITCODE:
+          exit_code()
         #If the user does have more lengths to input, exit loop and continue
         if more_lengths_input == "y" or more_lengths_input == "yes":
           break_loop = True
@@ -245,11 +270,10 @@ while proceed != EXITCODE:
     else:
       print("with the given values the entire triangle can now be described. Thankyou for your input.")
       #inform user of the input lengths
+  print("Lengths: [{}, {}, {}]".format(lengthD, lengthE, lengthF))
+  proceed = input()
   if proceed == EXITCODE:
-    break
-  else:
-    print("Lengths: [{}, {}, {}]".format(lengthD, lengthE, lengthF))
-    proceed = input()
+    exit_code()
   #Get inputs for all known angles if needed
   if known_lengths < 2:
     #Loop, inform user that they don't have enough lengths to derive the entire triangle, get an angle
@@ -303,21 +327,11 @@ while proceed != EXITCODE:
   
   #Return triangle dimensions to user
   proceed = input("Values: [{}, {}, {}, {}, {}, {}, Functions: {}]\n".format(round(math.degrees(angleA), 2), round(math.degrees(angleB), 2), round(math.degrees(angleC), 2), lengthD, lengthE, lengthF, function))
+  if proceed == EXITCODE:
+    exit_code()
   #Save triangle dimensions to text document
   history = open("history.txt", "a")
   history.write("Angles: {}, {}. Right Angle: {}. Lengths: {}, {}. Hypotenuse: {}. Functions: {}\n".format(round(math.degrees(angleA), 2), round(math.degrees(angleB), 2), round(math.degrees(angleC), 2), lengthD, lengthE, lengthF, function))
   history.close()
   #End loop
-  
-#Return calculation history
-history = open("history.txt", "r")
-#history_lines = len(history.readlines())
-#print(history_lines)
-history_items = history.readlines()
-history.close()
-history_number = 0
-print("History: ")
-for i in history_items:
-  print(history_items[history_number])
-  history_number += 1
-print("Program ceased with exit code 0")
+main()

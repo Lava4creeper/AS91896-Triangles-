@@ -273,6 +273,8 @@ def main():
     while known_angles < 1:
       print("To calculate the dimensions of the right angled triangle with only one known length, you must input 1 angle that is not the 90° angle to proceed.")
       temp_angle = input_angle(proceed)
+      if temp_angle == EXITCODE:
+        exit_code()
       #if the length the user has isn't the hypotenuse, work out if the angle is opposite or adjacent
       if known_hypotenuse == False:
         angle_relation = angle_checker(temp_angle, lengthD)

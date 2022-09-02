@@ -11,14 +11,20 @@ def main_menu():
   #clear screen
   os.system("clear")
   #introduce user to the program and allow them to continue when ready
-  proceed = input("Welcome to Triangle Calculator V1.0! \n\nThis calculator was designed to make your trigonometry homework a breeze!\n\nPress <enter> to continue:\n ").lower()
+  proceed = input("Welcome to Triangle Calculator V1.0! \n\nThis calculator was designed to make your trigonometry homework a breeze!\n\ninput (e)xplanations to read about the processes involved in calculating the dimensions of a triangle, or press <enter> to calculate your triangle:\n ").lower()
+  os.system("clear")
   if proceed == EXITCODE:
     exit_code()
-  #clear screen
-  os.system('clear')
+  elif proceed == "e" or proceed == "explanation" or proceed == "explanations":
+    explanations()
   #exit function
   return
 #get input for lengths
+def explanations():
+  proceed = input("A triangle can be completely described and its dimensions calculated from 2 inputs, so long as one of those inputs is a length.\n\nThere are three trigonometric functions that can be applied: sine, cosine or tangent. Depending on the given data, different combinations of these can be utilized to describe the whole triangle.\n\nThis can be done by taking a length and a length or an angle and applying these functions to them.\n\nThis program takes input from you, the user, on different parts of your triangles and uses this knowledge to calculate the dimensions of the rest of your triangle.\n\npress <enter> to return to main menu")
+  if proceed == EXITCODE:
+    exit_code()
+  return
 def input_length(known_hypotenuse, lengthF):
   #set up loop and exit code
   while True:
@@ -187,16 +193,19 @@ def exit_code():
     exit_code()
   continue_or_exit()
 def continue_or_exit():
-  error = "Invalid input; Please input either (f)inish or (c)ontinue. Press <enter> to continue:\n"
+  error = "Invalid input; Please input either (y)es or (n)o.\n\n Press <enter> to continue:\n"
   while True:
-    finish_or_continue = input("Would you like to continue with your current data or finish your session?\n").lower()
+    finish_or_continue = input("Would you like to continue with your current history?\n").lower()
     if finish_or_continue == EXITCODE:
       exit_code()
-    elif finish_or_continue == "f" or finish_or_continue == "finish" or finish_or_continue == "(f)inish":
+    elif finish_or_continue == "y" or finish_or_continue == "yes" or finish_or_continue == "(y)es":
+      proceed = input("continuing with current data\n\npress <enter> to continue:")
+      if proceed == EXITCODE:
+        exit_code()
       history = open("history.txt", "w")
       history.write("")
       break
-    elif finish_or_continue == "c" or finish_or_continue == "continue" or finish_or_continue == "(c)ontinue":
+    elif finish_or_continue == "n" or finish_or_continue == "no" or finish_or_continue == "(n)o":
       break
     else:
       print(error)

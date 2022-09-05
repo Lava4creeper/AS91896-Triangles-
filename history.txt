@@ -1,2 +1,0 @@
-Angles: 63.43, 26.57. Right Angle: 90.0. Lengths: 30.0, 59.922. Hypotenuse: 67.0. Functions: sec, sin
-Angles: 76.0, 14.0. Right Angle: 90.0. Lengths: 64.04, 15.967. Hypotenuse: 66.0. Functions: sin, cos

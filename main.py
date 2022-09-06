@@ -95,7 +95,7 @@ def is_hypotenuse(length):
       if proceed == EXITCODE:
         exit_code()
 #get input for angles
-def input_angle(proceed):
+def input_angle():
   #Set up loop and exit code
   while True:
     #Set up variables and error message
@@ -103,6 +103,7 @@ def input_angle(proceed):
     error = "This is not a valid angle. Please enter a real number greater than 0° and less than 90°\n\nPress <enter> to proceed:\n"
     #get an input for the angle in degrees
     angle = input("Please enter the value of an angle in degrees:\n").lower()
+    os.system("clear")
     try:
       rounded_angle = round(float(angle), 3)
       #check the input angle is valid and return it
@@ -119,13 +120,10 @@ def input_angle(proceed):
     except ValueError:
       #Check if the input value is the exit code
       if angle == EXITCODE:
-        break
+        exit_code()
       #print error message
       proceed = input(error).lower()
-      #Clear screen
       os.system("clear")
-      if proceed == EXITCODE:
-        exit_code()
 #Check angle relation to length
 def angle_checker(angle, length):
   #Set up loop and exit code
@@ -196,24 +194,34 @@ def exit_code():
   continue_or_exit()
 def continue_or_exit():
   error = "Invalid input; Please input either (y)es or (n)o.\n\n Press <enter> to continue:\n"
-  while True:
-    finish_or_continue = input("Would you like to continue with your current history?\n").lower()
-    os.system("clear")
-    if finish_or_continue == EXITCODE:
-      exit_code()
-    elif finish_or_continue == "y" or finish_or_continue == "yes" or finish_or_continue == "(y)es":
-      proceed = input("continuing with current data\n\npress <enter> to continue:")
+  history = open("history.txt", "r")
+  if len(history.readlines()) > 0:
+    history.close()
+    while True:
+      finish_or_continue = input("Would you like to continue with your current history?\n").lower()
       os.system("clear")
-      if proceed == EXITCODE:
+      if finish_or_continue == EXITCODE:
         exit_code()
-      history = open("history.txt", "w")
-      history.write("")
-      break
-    elif finish_or_continue == "n" or finish_or_continue == "no" or finish_or_continue == "(n)o":
-      break
-    else:
-      print(error)
-  main()
+      elif finish_or_continue == "y" or finish_or_continue == "yes" or finish_or_continue == "(y)es":
+        proceed = input("continuing with current data\n\npress <enter> to continue:")
+        os.system("clear")
+        if proceed == EXITCODE:
+          exit_code()
+        break
+      elif finish_or_continue == "n" or finish_or_continue == "no" or finish_or_continue == "(n)o":
+        print("deleting current history...")
+        history = open("history.txt", "w")
+        history.write("")
+        proceed = input("History deleted.\n\nPress <enter> to continue:")
+        if proceed == EXITCODE:
+          exit_code()
+        break
+      else:
+        print(error)
+    main()
+  else:
+    history.close()
+    main()
 #Create loop and establish exit code
 def main():
   while True:
@@ -300,10 +308,7 @@ def main():
       #Loop, inform user that they don't have enough lengths to derive the entire triangle, get an angle
       while known_angles < 1:
         print("To calculate the dimensions of the right angled triangle with only one known length, you must input 1 angle that is not the 90° angle to proceed.")
-        temp_angle = input_angle(proceed)
-        os.system("clear")
-        if temp_angle == EXITCODE:
-          exit_code()
+        temp_angle = input_angle()
         #if the length the user has isn't the hypotenuse, work out if the angle is opposite or adjacent
         if known_hypotenuse == False:
           angle_relation = angle_checker(temp_angle, lengthD)
@@ -349,7 +354,7 @@ def main():
       angleA, angleB, angleC, lengthD, lengthE, lengthF = sec_sin(angleA, angleB, angleC, lengthD, lengthE, lengthF)
     
     #Return triangle dimensions to user
-    proceed = input("Values: [{}, {}, {}, {}, {}, {}, Functions: {}]\n".format(round(math.degrees(angleA), 2), round(math.degrees(angleB), 2), round(math.degrees(angleC), 2), lengthD, lengthE, lengthF, function)).lower()
+    proceed = input("Values:\n\nAngles:\n\nFirst angle: {}° \nSecond angle: {}°\nRight angle: {}°\n\nLengths:\n\nFirst length: {}\nSecond length: {}\nHypotenuse: {}\n\nFunctions performed: {}\n\nPress <enter> to continue".format(round(math.degrees(angleA), 2), round(math.degrees(angleB), 2), round(math.degrees(angleC), 2), lengthD, lengthE, lengthF, function)).lower()
     os.system("clear")
     if proceed == EXITCODE:
       exit_code()

@@ -1,0 +1,3 @@
+Angles: 36.9, 53.1. Right Angle: 90.0. Lengths: 4.0, 3.002. Hypotenuse: 5.0. Functions: sec, sin
+Angles: 53.11, 36.89. Right Angle: 90.0. Lengths: 6.0, 7.998. Hypotenuse: 10.0. Functions: sec, sin
+Angles: 36.9, 53.1. Right Angle: 90.0. Lengths: 9.0, 12.0. Hypotenuse: 14.99. Functions: cot, sin

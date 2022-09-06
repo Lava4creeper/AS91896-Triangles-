@@ -352,21 +352,21 @@ def main():
     #sec_sin
     elif function == "sec, sin":
       angleA, angleB, angleC, lengthD, lengthE, lengthF = sec_sin(angleA, angleB, angleC, lengthD, lengthE, lengthF)
-    
+
+    #Save triangle dimensions to text document
+    history = open("history.txt", "a")
+    history.write("Angles: {}, {}. Right Angle: {}. Lengths: {}, {}. Hypotenuse: {}. Functions: {}\n".format(round(math.degrees(angleA), 2), round(math.degrees(angleB), 2), round(math.degrees(angleC), 2), lengthD, lengthE, lengthF, function))
+    history.close()
     #Return triangle dimensions to user
     proceed = input("Values:\n\nAngles:\n\nFirst angle: {}° \nSecond angle: {}°\nRight angle: {}°\n\nLengths:\n\nFirst length: {}\nSecond length: {}\nHypotenuse: {}\n\nFunctions performed: {}\n\nPress <enter> to continue".format(round(math.degrees(angleA), 2), round(math.degrees(angleB), 2), round(math.degrees(angleC), 2), lengthD, lengthE, lengthF, function)).lower()
     os.system("clear")
     if proceed == EXITCODE:
       exit_code()
-    #Save triangle dimensions to text document
-    history = open("history.txt", "a")
-    history.write("Angles: {}, {}. Right Angle: {}. Lengths: {}, {}. Hypotenuse: {}. Functions: {}\n".format(round(math.degrees(angleA), 2), round(math.degrees(angleB), 2), round(math.degrees(angleC), 2), lengthD, lengthE, lengthF, function))
-    history.close()
     #End loop
 history = open("history.txt", "r")
 if len(history.readlines()) > 0:
   history.close()
-  print("Previous data found. Would you like to continue with this or clear it?")
+  print("Previous data found.")
   continue_or_exit()
 else:
   history.close()
